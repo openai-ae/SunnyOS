@@ -1,0 +1,129 @@
+name: Build and Release Multiple ISOs with Different Desktop Environments
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_title:
+        description: 'Title of the release'
+        required: true
+        default: 'SunnyOS Multi-Branch Release'
+      release_description:
+        description: 'Description for the release'
+        required: true
+        default: 'This release contains ISOs for multiple branches of SunnyOS.'
+      release_version:
+        description: 'Version of the release'
+        required: true
+        default: '0.0.0'
+
+jobs:
+  build_and_release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Set up temporary storage
+        run: |
+          sudo mkdir -p /mnt/temp
+          sudo chmod 777 /mnt/temp
+
+      - name: Build Docker Image if not exists
+        id: docker_build
+        run: |
+          IMAGE_NAME="archlinux_sunnyos"
+          
+          # Check if the Docker image exists
+          docker images -q $IMAGE_NAME || \
+            docker build -t $IMAGE_NAME - <<EOF
+            FROM archlinux:latest
+
+            # Install necessary packages
+            RUN pacman -Sy --noconfirm archiso
+
+            # Install any additional dependencies here (if needed)
+            RUN pacman -Sy --noconfirm base-devel git
+
+            EOF
+
+      - name: Build ISOs for all branches
+        run: |
+          # Define the branches and corresponding desktop environments
+          branches=("sunnyos_gnome" "sunnyos_kde" "sunnyos_xfce")
+
+          # Start the Docker container for building
+          docker run --rm --privileged \
+            -v "$GITHUB_WORKSPACE:/work" \
+            -v "/mnt/temp:/tmp" \
+            $IMAGE_NAME /bin/bash -c "
+
+            # Loop through each branch and build the ISO
+            for branch in \${branches[@]}; do
+              git checkout \$branch
+              
+              # Determine the desktop environment based on the branch
+              case \$branch in
+                sunnyos_gnome)
+                  desktop_env='gnome'
+                  ;;
+                sunnyos_kde)
+                  desktop_env='kde'
+                  ;;
+                sunnyos_xfce)
+                  desktop_env='xfce'
+                  ;;
+                *)
+                  desktop_env='default'
+                  ;;
+              esac
+
+              echo 'Building ISO with \$desktop_env for branch \$branch'
+              
+              # Build the ISO with mkarchiso
+              pacman -Sy --noconfirm archiso &&
+              mkarchiso -v -w /tmp/work -o /tmp/out /work/profiles/\$desktop_env
+
+              # Move the generated ISO to a central location
+              mv /mnt/temp/out/*.iso /mnt/temp/\$branch-\$desktop_env-sunnyos.iso
+            done
+          "
+
+      - name: Create GitHub Release
+        id: create_release
+        run: |
+          release_title="${{ github.event.inputs.release_title }}"
+          release_description="${{ github.event.inputs.release_description }}"
+          release_version="${{ github.event.inputs.release_version }}"
+
+          echo "Creating release with title: $release_title, description: $release_description, and version: $release_version"
+
+          # Create the release via GitHub API
+          release_response=$(curl -XPOST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -d '{
+                  "tag_name": "'$release_version'",
+                  "name": "'$release_title'",
+                  "body": "'$release_description'",
+                  "draft": false,
+                  "prerelease": false
+                }' \
+            https://api.github.com/repos/${{ github.repository }}/releases)
+
+          release_id=$(echo $release_response | jq -r '.id')
+
+          echo "Created release with ID: $release_id"
+
+      - name: Upload ISOs to Release
+        run: |
+          # Upload all ISOs to the GitHub release
+          for iso in /mnt/temp/*-sunnyos.iso
+          do
+            echo "Uploading $iso to release"
+            curl -XPOST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Content-Type: application/octet-stream" \
+              --data-binary @$iso \
+              "https://uploads.github.com/repos/${{ github.repository }}/releases/$release_id/assets?name=$(basename $iso)"
+          done
