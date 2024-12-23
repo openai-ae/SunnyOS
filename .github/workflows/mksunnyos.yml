@@ -22,7 +22,7 @@ jobs:
 
       - name: Build SunnyOS ISO
         run: |
-          docker run --rm -v "$GITHUB_WORKSPACE:/work" archlinux:latest /bin/bash -c "
+          docker run --rm --privileged -v "$GITHUB_WORKSPACE:/work" archlinux:latest /bin/bash -c "
             pacman -Sy --noconfirm archiso &&
             mkarchiso -v -w /tmp/work -o /tmp/out /work/profile
           "
