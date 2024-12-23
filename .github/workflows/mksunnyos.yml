@@ -22,7 +22,7 @@ jobs:
 
       - name: Increase Available Disk Space
         run: |
-          mkdir -p /tmp/temp && sudo mount -t tmpfs -o size=10G tmpfs /tmp/temp
+          mkdir -p /tmp/temp && sudo mount -t tmpfs -o size=30G tmpfs /tmp/temp
 
       - name: Build SunnyOS ISO
         run: |
