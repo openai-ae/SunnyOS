@@ -22,7 +22,8 @@ jobs:
 
       - name: Use /mnt for Temporary Storage
         run: |
-          mkdir -p /mnt/temp
+          sudo mkdir -p /mnt/temp
+          sudo chmod 777 /mnt/temp
 
       - name: Build SunnyOS ISO
         run: |
