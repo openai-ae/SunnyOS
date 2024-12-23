@@ -1,0 +1,33 @@
+name: Clean GitHub Runner
+
+on:
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  clean-runner:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Start Cleanup
+        run: echo "Starting cleanup on GitHub runner..."
+
+      - name: Remove Temporary Files
+        run: sudo rm -rf /tmp/*
+
+      - name: Clear APT Cache
+        run: sudo apt-get clean
+
+      - name: Remove Unused Docker Resources
+        run: |
+          docker container prune -f
+          docker image prune -af
+          docker volume prune -f
+
+      - name: Clear npm Cache
+        run: npm cache clean --force || echo "npm not installed"
+
+      - name: Clean Workspace Directory
+        run: rm -rf $GITHUB_WORKSPACE/*
+
+      - name: Check Disk Space
+        run: df -h
