@@ -22,13 +22,21 @@ jobs:
 
       - name: Increase Available Disk Space
         run: |
-          mkdir -p /tmp/temp && sudo mount -t tmpfs -o size=30G tmpfs /tmp/temp
+          mkdir -p /tmp/temp && sudo mount -t tmpfs -o size=40G tmpfs /tmp/temp
+
+      - name: Set up swap space
+        run: |
+          sudo fallocate -l 8G /swapfile  # Allocate 8GB of swap space
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
 
       - name: Build SunnyOS ISO
         run: |
           docker run --rm --privileged \
             -v "$GITHUB_WORKSPACE:/work" \
             -v "/tmp/temp:/tmp" \
+            --memory=16g --memory-swap=24g \
             archlinux:latest /bin/bash -c "
               pacman -Sy --noconfirm archiso &&
               mkarchiso -v -w /tmp/work -o /tmp/out /work/profile
