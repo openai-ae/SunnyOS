@@ -1,4 +1,3 @@
-dconf load /org/gnome/ < gnome-backup
 #!/bin/bash
 
 REPOOWNER="ekkinox"
