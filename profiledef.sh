@@ -20,12 +20,9 @@ file_permissions=(
   ["/etc/shadow"]="0:0:0400"
   ["/etc/gshadow"]="0:0:0400"
   ["/root"]="0:0:750"
-  ["/root/.automated_script.sh"]="0:0:755"
-  ["/root/.gnupg"]="0:0:700"
   ["/usr/local/bin/choose-mirror"]="0:0:755"
   ["/usr/local/bin/Installation_guide"]="0:0:755"
   ["/usr/local/bin/livecd-sound"]="0:0:755"
   ["/usr/bin/calamares"]="0:0:755"
   ["/usr/share/calamares"]="0:0:755"
-  ["/home/sunny/config/apply.sh"]="0:0:755"
 )
