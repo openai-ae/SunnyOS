@@ -34,7 +34,7 @@ jobs:
             -v "/mnt/temp:/tmp" \
             archlinux:latest /bin/bash -c "
               pacman -Sy --noconfirm archiso &&
-              mkarchiso -v -w /tmp/work -o /tmp/out /work/profile
+              mkarchiso -v -w /tmp/work -o /tmp/out /work
             "
 
       - name: Upload ISO artifact

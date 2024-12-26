@@ -1,0 +1,11 @@
+NAME="SunnyOS"
+PRETTY_NAME="SunnyOS"
+ID=sun
+BUILD_ID=stable_beta
+ANSI_COLOR="38;2;255;255;0"
+HOME_URL="https://archlinux.org/"
+DOCUMENTATION_URL="https://wiki.archlinux.org/"
+SUPPORT_URL="https://bbs.archlinux.org/"
+BUG_REPORT_URL="https://gitlab.archlinux.org/groups/archlinux/-/issues"
+PRIVACY_POLICY_URL="https://terms.archlinux.org/docs/privacy-policy/"
+LOGO=sunnyos-logo

@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=SunGlasses Session
+GenericName=Custom Session of Gnome
+Comment=Runs SunGlasses
+Exec=/home/sunny/config/apply.sh
+Terminal=false
+Type=Application
+X-GNOME-Autostart-enabled=true
+NoDisplay=true
