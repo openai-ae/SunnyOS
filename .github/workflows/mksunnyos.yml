@@ -15,7 +15,9 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -32,11 +34,11 @@ jobs:
             -v "/mnt/temp:/tmp" \
             archlinux:latest /bin/bash -c "
               pacman -Sy --noconfirm archiso &&
-              mkarchiso -v -w /tmp/work -o /tmp/out /work/profile
+              mkarchiso -v -w /tmp/work -o /tmp/out /work
             "
 
       - name: Upload ISO artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sunnyos-iso
           path: /mnt/temp/out/*.iso
