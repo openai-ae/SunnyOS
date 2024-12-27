@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           ref: ${{ github.event.inputs.branch }}
 
@@ -38,7 +38,7 @@ jobs:
             "
 
       - name: Upload ISO artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sunnyos-iso
           path: /mnt/temp/out/*.iso
