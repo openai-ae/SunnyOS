@@ -35,6 +35,7 @@ fakeroot
 git
 glibc-locales
 libva-mesa-driver
+lsb-release
 man-db
 mesa
 mesa-vdpau
@@ -116,5 +117,4 @@ gnome-shell-extension-tilingshell
 gnome-shell-extension-useless-gaps
 gnome-shell-extension-wiggle
 yai
-sunny-branding
 sunny-gdm-config
