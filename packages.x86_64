@@ -16,7 +16,21 @@ dosfstools
 efibootmgr
 efitools
 edk2-shell
+btrfs-progs
+dosfstools
+e2fsprogs
+exfatprogs
 f2fs-tools
+jfsutils
+lvm2
+mtools
+nfs-utils
+nilfs-utils
+ntfs-3g
+reiserfsprogs
+xfsprogs
+rsync
+reflector
 fakeroot
 git
 glibc-locales
@@ -33,7 +47,6 @@ plymouth
 podman
 podman-compose
 pv
-qemu-guest-agent
 sof-firmware
 sudo
 terminus-font
@@ -52,6 +65,7 @@ grml-zsh-config
 gnome
 gnome-shell-extension-caffeine
 gnome-shell-extension-appindicator
+xorg-server
 adw-gtk-theme
 bluez
 bluez-cups
@@ -77,7 +91,6 @@ pipewire-audio
 pipewire-jack
 pipewire-pulse
 power-profiles-daemon
-spice-vdagent
 switcheroo-control
 webp-pixbuf-loader
 wireplumber
