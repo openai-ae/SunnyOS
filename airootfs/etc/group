@@ -1,0 +1,8 @@
+root:x:0:root
+adm:x:4:sunny
+wheel:x:10:sunny
+uucp:x:14:sunny
+nopasswdlogin:x:966:sunny
+rfkill:x:983:sunny
+sys:x:3:bin,sunny
+sunny:x:1000:sunny

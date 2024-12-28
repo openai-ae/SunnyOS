@@ -1,0 +1,36 @@
+name: Build SunnyOS with GNOME ISO
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Use /mnt for Temporary Storage
+        run: |
+          sudo mkdir -p /mnt/temp
+          sudo chmod 777 /mnt/temp
+
+      - name: Build SunnyOS ISO
+        run: |
+          docker run --rm --privileged \
+            -v "$GITHUB_WORKSPACE:/work" \
+            -v "/mnt/temp:/tmp" \
+            archlinux:latest /bin/bash -c "
+              pacman -Sy --noconfirm archiso &&
+              mkarchiso -v -w /tmp/work -o /tmp/out /work
+            "
+
+      - name: Upload ISO artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sunnyos-iso
+          path: /mnt/temp/out/*.iso
