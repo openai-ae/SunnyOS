@@ -128,6 +128,7 @@ zsh
 
 # DE
 gnome
+wayland
 xorg
 xorg-server
 
@@ -170,3 +171,16 @@ fastfetch
 # Network
 networkmanager
 
+#sunnyos repo
+application-cleaner
+gnome-shell-extension-advanced-tab-bar
+gnome-shell-extension-dash-to-dock
+gnome-shell-extension-fly-pie
+gnome-shell-extension-just-perfection-desktop
+gnome-shell-extension-rounded-corners
+gnome-shell-extension-rounded-window-corners
+gnome-shell-extension-tilingshell
+gnome-shell-extension-useless-gaps
+gnome-shell-extension-wiggle
+yai
+sunny-gdm-config
