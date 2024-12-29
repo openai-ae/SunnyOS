@@ -7,6 +7,9 @@ window-height=1000
 window-maximized=false
 window-width=1880
 
+[org/gnome/login-screen]
+logo='/usr/share/pixmaps/SunnyOS.png'
+
 [org/gnome/Geary]
 migrated-config=true
 
