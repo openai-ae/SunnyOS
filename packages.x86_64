@@ -118,3 +118,7 @@ gnome-shell-extension-wiggle
 yai
 feather-gnome-config
 feather-branding
+
+# installer
+os-installer
+os-installer-config
