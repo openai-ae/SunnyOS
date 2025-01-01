@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=Sunny Installer
-Comment=System Installer
-Exec=calamares
-Icon=calamares
-Terminal=false
-Type=Application
-Categories=System;Settings;

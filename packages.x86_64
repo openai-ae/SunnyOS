@@ -175,5 +175,8 @@ fastfetch
 networkmanager
 
 #sunnyos repo
+filesystem
 yai
 sunny-gdm-config
+sunny-calamares-config
+calamares
