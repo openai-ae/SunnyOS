@@ -1,4 +1,4 @@
-name: Build SunnyOS with GNOME ISO
+name: Build SunnyOS with Budgie ISO
 
 on:
   workflow_dispatch:
