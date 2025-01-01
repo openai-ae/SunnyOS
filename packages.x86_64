@@ -130,7 +130,7 @@ xl2tpd
 zsh
 
 # DE
-gnome
+budgie
 wayland
 xorg
 xorg-server

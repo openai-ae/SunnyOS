@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2034
 
-iso_name="SunnyOS"
+iso_name="SunnyOS_Budgie"
 iso_label="SUNNY_$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y%m)"
 iso_publisher="itzParsaYC | OpenAL Technologies"
 iso_application="SunnyOS Live/Rescue CD"
