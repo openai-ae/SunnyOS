@@ -1,0 +1,13 @@
+[Unit]
+Description=pythonlib-linker
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/ln -s /run/archiso/airootfs/usr/lib/libpython3.13.so.1.0 /usr/lib/libpython3.12.so.1.0 
+Restart=on-failure
+User=root
+
+[Install]
+WantedBy=multi-user.target
+

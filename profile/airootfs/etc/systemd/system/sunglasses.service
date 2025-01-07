@@ -1,9 +1,0 @@
-[Unit]
-Description=SunGlasses Session
-
-[Service]
-Type=simple
-ExecStart=/home/sunny/config/apply.sh
-
-[Install]
-WantedBy=multi-user.target
