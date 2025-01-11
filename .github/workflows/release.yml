@@ -27,10 +27,10 @@ jobs:
           # Check if the Docker image exists; build if not
           if [ -z "$(docker images -q $IMAGE_NAME)" ]; then
             echo "Building Docker image: $IMAGE_NAME"
-            docker build -t $IMAGE_NAME - <<EOF
-            FROM archlinux:latest
-            RUN pacman -Sy --noconfirm archiso base-devel git
-            EOF
+            docker build -t $IMAGE_NAME - <<'EOF'
+FROM archlinux:latest
+RUN pacman -Sy --noconfirm archiso base-devel git
+EOF
           else
             echo "Docker image $IMAGE_NAME already exists."
           fi
@@ -40,7 +40,7 @@ jobs:
           IMAGE_NAME: archlinux_sunnyos
         run: |
           # Define the branches and corresponding desktop environments
-          branches=("sunnyos_gnome" "sunnyos_kde" "sunnyos_xfce")
+          branches=("sunnyos_gnome" "sunnyos_budgie" "lite_gnome")
 
           # Start the Docker container for building
           docker run --rm --privileged \
@@ -53,10 +53,10 @@ jobs:
 
               # Determine the desktop environment based on the branch
               case $branch in
-                sunnyos_gnome) desktop_env='gnome' ;;
-                sunnyos_kde) desktop_env='kde' ;;
-                sunnyos_xfce) desktop_env='xfce' ;;
-                *) desktop_env='default' ;;
+              sunnyos_gnome) desktop_env='gnome' ;;
+              sunnyos_budgie) desktop_env='budgie' ;;
+              lite_gnome) desktop_env='lite_gnome' ;; # Separate profile for the lite version
+              *) desktop_env='default' ;;
               esac
 
               echo 'Building ISO with $desktop_env for branch $branch'
