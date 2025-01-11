@@ -13,6 +13,9 @@ on:
         description: 'Version for the release'
         required: true
 
+permissions:
+  contents: write  # Grant write access to create releases
+
 jobs:
   build_and_release:
     runs-on: ubuntu-latest
@@ -20,34 +23,43 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Build ISOs for all branches
+      - name: Set up Docker container
         env:
           IMAGE_NAME: archlinux:latest
+        run: |
+          # Pull the Arch Linux image if not already available
+          docker pull $IMAGE_NAME
+
+          # Start the Docker container in the background
+          docker run --rm --privileged -d \
+            -v "$GITHUB_WORKSPACE:/work" \
+            -v "/mnt/temp:/tmp" \
+            --name build-container \
+            $IMAGE_NAME
+
+      - name: Build ISOs inside Docker
         run: |
           # Define the branches and corresponding desktop environments
           branches=("sunnyos_gnome" "sunnyos_budgie" "lite_gnome")
 
-          # Start the Docker container for building
-          docker run --rm --privileged \
-            -v "$GITHUB_WORKSPACE:/work" \
-            -v "/mnt/temp:/tmp" \
-            $IMAGE_NAME /bin/bash <<'EOF'
-          set -e
+          # Run commands inside the container
+          docker exec build-container bash -c "
+            set -e
+            pacman -Sy --noconfirm archiso
+            cd /work
+            git fetch --all
+            for branch in \"\${branches[@]}\"; do
+              echo 'Checking out branch: $branch'
+              git checkout $branch
+              echo 'Building ISO for branch $branch'
+              mkarchiso -v -w /tmp/work -o /tmp/out /work
+              mv /tmp/out/*.iso /tmp/$branch-sunnyos.iso
+            done
+          "
 
-          pacman -Sy --noconfirm archiso
-          cd /work
-          git fetch --all
-          for branch in "${branches[@]}"; do
-            echo "Checking out branch: $branch"
-            git checkout $branch
-
-            echo "Building ISO for branch $branch"
-            mkarchiso -v -w /tmp/work -o /tmp/out /work
-
-            # Move the generated ISO to a central location
-            mv /tmp/out/*.iso /mnt/temp/$branch-sunnyos.iso
-          done
-          EOF
+      - name: Stop Docker container
+        run: |
+          docker stop build-container
 
       - name: Create GitHub Release
         id: create_release
@@ -56,9 +68,9 @@ jobs:
         run: |
           release_response=$(curl -XPOST -H "Authorization: token $GITHUB_TOKEN" \
             -d '{
-              "tag_name": "'"${{ github.event.inputs.release_version }}"'",
-              "name": "'"${{ github.event.inputs.release_title }}"'",
-              "body": "'"${{ github.event.inputs.release_description }}"'",
+              "tag_name": "${{ github.event.inputs.release_version }}",
+              "name": "${{ github.event.inputs.release_title }}",
+              "body": "${{ github.event.inputs.release_description }}",
               "draft": false,
               "prerelease": false
             }' \
