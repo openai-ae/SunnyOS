@@ -44,6 +44,13 @@ jobs:
             exit 1
           fi
 
+      - name: Install necessary packages inside Docker
+        run: |
+          docker exec build-container bash -c "
+            set -e
+            pacman -Sy --noconfirm archiso git
+          "
+
       - name: Build ISOs inside Docker
         run: |
           # Define the branches and corresponding desktop environments
@@ -52,7 +59,6 @@ jobs:
           # Run commands inside the container
           docker exec build-container bash -c "
             set -e
-            pacman -Sy --noconfirm archiso git
             git config --global --add safe.directory /work
             cd /work
             git fetch --all
