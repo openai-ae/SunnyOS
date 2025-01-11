@@ -52,7 +52,7 @@ jobs:
           # Run commands inside the container
           docker exec build-container bash -c "
             set -e
-            pacman -Sy --noconfirm archiso
+            pacman -Sy --noconfirm archiso git
             cd /work
             git fetch --all
             for branch in \"\${branches[@]}\"; do
