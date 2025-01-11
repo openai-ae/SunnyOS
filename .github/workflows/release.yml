@@ -53,21 +53,20 @@ jobs:
 
       - name: Build ISOs inside Docker
         run: |
-          # Define the branches and corresponding desktop environments
-          branches=("sunnyos_gnome" "sunnyos_budgie" "lite_gnome")
-
-          # Run commands inside the container
           docker exec build-container bash -c "
             set -e
+            pacman -Sy --noconfirm archiso git
             git config --global --add safe.directory /work
             cd /work
-            git fetch --all
+
+            branches=(sunnyos_gnome sunnyos_budgie lite_gnome)
+
             for branch in \"\${branches[@]}\"; do
               echo 'Checking out branch: $branch'
               git checkout $branch
-              echo 'Building ISO for branch $branch'
+              echo 'Building ISO for branch: $branch'
               mkarchiso -v -w /tmp/work -o /tmp/out /work
-              mv /tmp/out/*.iso /tmp/$branch-sunnyos.iso
+              mv /tmp/out/*.iso /tmp/${branch}-sunnyos.iso
             done
           "
 
