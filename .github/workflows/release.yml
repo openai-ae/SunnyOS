@@ -53,6 +53,7 @@ jobs:
           docker exec build-container bash -c "
             set -e
             pacman -Sy --noconfirm archiso git
+            git config --global --add safe.directory /work
             cd /work
             git fetch --all
             for branch in \"\${branches[@]}\"; do
