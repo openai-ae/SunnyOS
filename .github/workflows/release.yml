@@ -30,12 +30,19 @@ jobs:
           # Pull the Arch Linux image if not already available
           docker pull $IMAGE_NAME
 
-          # Start the Docker container in the background
+          # Start the Docker container in interactive mode
           docker run --rm --privileged -d \
             -v "$GITHUB_WORKSPACE:/work" \
             -v "/mnt/temp:/tmp" \
             --name build-container \
-            $IMAGE_NAME
+            $IMAGE_NAME bash -c "while true; do sleep 30; done"
+
+      - name: Ensure Docker container is running
+        run: |
+          if ! docker ps | grep -q build-container; then
+            echo "Error: Docker container is not running."
+            exit 1
+          fi
 
       - name: Build ISOs inside Docker
         run: |
@@ -57,9 +64,14 @@ jobs:
             done
           "
 
-      - name: Stop Docker container
+      - name: Verify and stop Docker container
         run: |
-          docker stop build-container
+          if docker ps | grep -q build-container; then
+            echo "Stopping Docker container..."
+            docker stop build-container
+          else
+            echo "Docker container is not running. No need to stop."
+          fi
 
       - name: Create GitHub Release
         id: create_release
