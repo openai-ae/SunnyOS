@@ -34,7 +34,7 @@ jobs:
           docker run --rm --privileged -d \
             -v "$GITHUB_WORKSPACE:/work" \
             -v "/mnt/temp:/tmp" \
-            -v "/mnt/out:/out"
+            -v "/mnt/out:/out"  \
             --name build-container \
             $IMAGE_NAME bash -c "while true; do sleep 30; done"
 
