@@ -34,6 +34,7 @@ jobs:
           docker run --rm --privileged -d \
             -v "$GITHUB_WORKSPACE:/work" \
             -v "/mnt/temp:/tmp" \
+            -v "/mnt/out:/out"
             --name build-container \
             $IMAGE_NAME bash -c "while true; do sleep 30; done"
 
@@ -64,8 +65,9 @@ jobs:
               git checkout $branch
               echo 'Building ISO for branch: $branch'
               mkarchiso -v -w /tmp/work -o /tmp/out /work
-              iso_file=/tmp/out/SunnyOS-2025.01.11-${branch}.iso
-              mv /tmp/out/*.iso $iso_file
+              current_date=$(date +%Y.%m.%d)
+              iso_file=SunnyOS-$(current_date)-${branch}.iso
+              mv /tmp/out/SunnyOS*.iso /out/$iso_file
               echo \"Built ISO: $iso_file\"
             done
           "
@@ -107,7 +109,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           release_id: ${{ env.release_id }}
         run: |
-          for iso in /mnt/temp/*.iso; do
+          for iso in /mnt/out/*.iso; do
             echo "Uploading $iso to release"
             curl -XPOST -H "Authorization: token $GITHUB_TOKEN" \
               -H "Content-Type: application/octet-stream" \
