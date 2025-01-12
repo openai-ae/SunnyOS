@@ -58,15 +58,15 @@ jobs:
             pacman -Sy --noconfirm archiso git
             git config --global --add safe.directory /work
             cd /work
-
             branches=(sunnyos_gnome sunnyos_budgie lite_gnome)
-
             for branch in \"\${branches[@]}\"; do
               echo 'Checking out branch: $branch'
               git checkout $branch
               echo 'Building ISO for branch: $branch'
               mkarchiso -v -w /tmp/work -o /tmp/out /work
-              mv /tmp/out/*.iso /tmp/${branch}-sunnyos.iso
+              iso_file=/tmp/out/SunnyOS-2025.01.11-${branch}.iso
+              mv /tmp/out/*.iso $iso_file
+              echo \"Built ISO: $iso_file\"
             done
           "
 
