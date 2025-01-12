@@ -107,7 +107,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           release_id: ${{ env.release_id }}
         run: |
-          for iso in /mnt/temp/*-sunnyos.iso; do
+          for iso in /mnt/temp/*.iso; do
             echo "Uploading $iso to release"
             curl -XPOST -H "Authorization: token $GITHUB_TOKEN" \
               -H "Content-Type: application/octet-stream" \
