@@ -65,9 +65,8 @@ jobs:
               git checkout $branch
               echo 'Building ISO for branch: $branch'
               mkarchiso -v -w /tmp/work -o /tmp/out /work
-              current_date=$(date +%Y.%m.%d)
-              iso_file=SunnyOS-$(current_date)-${branch}.iso
-              mv /tmp/out/SunnyOS*.iso /out/$iso_file
+              iso_file=SunnyOS-$(date +%Y.%m.%d)-x86_64-{branch}.iso
+              mv /tmp/out/SunnyOS-$(date +%Y.%m.%d)-x86_64.iso /out/$iso_file
               echo \"Built ISO: $iso_file\"
             done
           "
