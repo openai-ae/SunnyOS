@@ -182,7 +182,7 @@ superagi
 anytype
 
 # Security Pack
-aircrack-ng 
+# aircrack-ng 
 wpscan
 nmap
 exploitdb
