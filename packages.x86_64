@@ -142,7 +142,6 @@ firefox
 gcc
 git
 docker
-blender
 fish
 cmake
 ninja
@@ -163,8 +162,6 @@ visualvm
 strace
 patchelf
 sccache
-intellij-idea-community-edition
-pycharm-community-edition
 bluez
 vlc
 pipewire
@@ -183,3 +180,11 @@ calamares
 sunnyos_grunty
 superagi
 anytype
+
+# Security Pack
+aircrack-ng 
+wpscan
+nmap
+exploitdb
+
+
