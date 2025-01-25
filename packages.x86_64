@@ -31,6 +31,7 @@ jfsutils
 lvm2
 nano
 sudo
+sunny-keyring
 networkmanager
 networkmanager-openconnect
 networkmanager-openvpn
