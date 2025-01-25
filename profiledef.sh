@@ -3,8 +3,8 @@
 
 iso_name="SunnyOS"
 iso_label="SUNNY_$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y%m)"
-iso_publisher="itzParsaYC | OpenAL Technologies"
-iso_application="SunnyOS Live/Rescue CD"
+iso_publisher="Nisel11"
+iso_application="SunnyOS Feather Edition Live/Rescue CD"
 iso_version="$(date --date="@${SOURCE_DATE_EPOCH:-$(date +%s)}" +%Y.%m.%d)"
 install_dir="sunny"
 buildmodes=('iso')
