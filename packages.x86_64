@@ -18,7 +18,7 @@ fwupd
 git
 switcheroo-control
 xdg-desktop-portal-gtk
-grml-zsh-config
+starship
 gst-plugin-pipewire
 gst-plugins-base
 gst-plugins-good
