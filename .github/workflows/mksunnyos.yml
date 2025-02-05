@@ -1,38 +1,57 @@
-name: Build SunnyOS with GNOME ISO
+name: Reusable Build ISO
 
 on:
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to build'
+        required: true
+        default: 'sunnyos_gnome'
+  workflow_call:
+    inputs:
+      branch:
+        description: 'Branch to build'
+        required: true
+        type: string
 
 jobs:
-  build:
+  build_and_upload:
+    name: Build
     runs-on: ubuntu-latest
-
+    continue-on-error: false
+    container:
+        image: archlinux:latest
+        options: --privileged
+    strategy:
+      fail-fast: false
+      matrix:
+        branch: ["${{ inputs.branch }}"]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.branch }}
+          ref: ${{ matrix.branch }}
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Use /mnt for Temporary Storage
+      - name: Use /mnt/temp for Build ISO
         run: |
-          sudo mkdir -p /mnt/temp
-          sudo chmod 777 /mnt/temp
+            mkdir -p /mnt/temp
+            chmod 777 /mnt/temp
+
+      - name: Install sunny-keyring
+        run: |
+            echo "[sunny]" >> /etc/pacman.conf
+            echo "SigLevel = Never" >> /etc/pacman.conf
+            echo "Server = https://openai-ae.github.io/sunnyOS_repo/repo/" >> /etc/pacman.conf
+            pacman-key --init
+            pacman -Sy --noconfirm sunny-keyring
 
       - name: Build SunnyOS ISO
         run: |
-          docker run --rm --privileged \
-            -v "$GITHUB_WORKSPACE:/work" \
-            -v "/mnt/temp:/tmp" \
-            archlinux:latest /bin/bash -c "
-              pacman -Sy --noconfirm archiso &&
-              mkarchiso -v -w /tmp/work -o /tmp/out /work
-            "
+            pacman -Sy --noconfirm archiso
+            mkarchiso -v -w /mnt/temp -o /mnt/temp/out $GITHUB_WORKSPACE
 
-      - name: Upload ISO artifact
+      - name: Upload ISO Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: sunnyos-iso
+          name: ${{ matrix.branch }}-iso
           path: /mnt/temp/out/*.iso
